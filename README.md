@@ -25,20 +25,20 @@
 
 > 相关博客
 
-### 类SpringMVC 
+### SpringMVC 
 
 > 相关博客
 
 
-### 类Spring
+### Spring
 
 > 相关博客
 
-### 类RPC
+### RPC
 
 > 相关博客
 
 
-### 类ORM
+### ORM
 
 > 相关博客
