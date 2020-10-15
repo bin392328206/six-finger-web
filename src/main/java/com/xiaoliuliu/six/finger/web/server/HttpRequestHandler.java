@@ -1,19 +1,16 @@
 package com.xiaoliuliu.six.finger.web.server;
 
-import io.netty.buffer.Unpooled;
+import com.xiaoliuliu.six.finger.web.common.util.UrlUtil;
+import com.xiaoliuliu.six.finger.web.webmvc.factory.RequestHandlerFactory;
+import com.xiaoliuliu.six.finger.web.webmvc.hander.RequestHandler;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.AsciiString;
-import io.netty.util.CharsetUtil;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.netty.handler.codec.http.HttpUtil.is100ContinueExpected;
+
 
 /**
  * @author 小六六
@@ -51,21 +48,29 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             System.out.println("请求了 favicon.ico, 不做响应");
             return;
         }
+        //根据不同的url返回不同要处理的方法handler
+        RequestHandler requestHandler = RequestHandlerFactory.create(req.method());
 
-        Map<String,String> resMap = new HashMap<>();
-        resMap.put("method",req.method().name());
-        resMap.put("uri",uri);
-        String msg = "<html><head><title></title></head><body>小六六提醒你:你请求uri为：" + uri+"</body></html>";
-        // 创建http响应
-        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-                HttpResponseStatus.OK,
-                Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8));
-
-        //设置头信息
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
-
-        //把消息输出到浏览器
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        Object result;
+        FullHttpResponse response;
+        try {
+            //真正执行我们的业务代码
+            result = requestHandler.handle(req);
+            //成功的返回封装
+            response = WebResponse.ok(result);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            String requestPath = UrlUtil.getRequestPath(req.uri());
+            response = WebResponse.internalServerError(requestPath, e.toString());
+        }
+        //判断连接是否关闭
+        boolean keepAlive = HttpUtil.isKeepAlive(req);
+        if (!keepAlive) {
+            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+        } else {
+            response.headers().set(CONNECTION, KEEP_ALIVE);
+            ctx.write(response);
+        }
 
     }
 
