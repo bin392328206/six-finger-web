@@ -5,6 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * @Des 失败的实体
+ * @Author 小六六
+ * @Date 2020/10/15 17:07
+ * @Param
+ * @Return
+ */
 @Getter
 @ToString
 @NoArgsConstructor

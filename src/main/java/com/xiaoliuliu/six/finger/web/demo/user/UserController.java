@@ -16,7 +16,7 @@ import com.xiaoliuliu.six.finger.web.webmvc.entity.RequestMethod;
 public class UserController {
 
     @GetMapping("/{id}")
-    public Integer get(@PathVariable("id") Integer id) {
+    public String get(@PathVariable("id") String id) {
         return id;
     }
 

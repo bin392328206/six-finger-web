@@ -16,7 +16,7 @@ import java.util.Map;
 public class UrlUtil {
 
     /**
-     * get the parameters of uri
+     * get the parameters of uri  用于获取？号后面的参数
      */
     public static Map<String, String> getQueryParams(String uri) {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(uri, Charset.forName("utf-8"));
@@ -31,7 +31,7 @@ public class UrlUtil {
     }
 
     /**
-     * get the decoded path of uri
+     * get the decoded path of uri 转成utf-8
      */
     public static String getRequestPath(String uri) {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(uri, Charset.forName("utf-8"));

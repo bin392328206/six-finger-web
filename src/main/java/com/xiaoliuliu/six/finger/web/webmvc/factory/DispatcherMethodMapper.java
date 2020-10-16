@@ -34,11 +34,13 @@ public class DispatcherMethodMapper {
 
     // get request url -> target method.
     // eg: "^/user/[\u4e00-\u9fa5_a-zA-Z0-9]+/?$" -> UserController.get(java.lang.Integer)
+    //用来封装方法的返回值
     private static final Map<String, Method> GET_REQUEST_MAPPINGS = new HashMap<>();
     // post request url -> target method.
     private static final Map<String, Method> POST_REQUEST_MAPPINGS = new HashMap<>();
     // formatted get request url -> original url
     // eg : "^/user/[\u4e00-\u9fa5_a-zA-Z0-9]+/?$" -> /user/{id}
+    //封装参数
     private static final Map<String, String> GET_URL_MAPPINGS = new HashMap<>();
     // formatted post request url -> original url
     private static final Map<String, String> POST_URL_MAPPINGS = new HashMap<>();
