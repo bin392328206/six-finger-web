@@ -1,6 +1,10 @@
 package com.xiaoliuliu.six.finger.web.demo.server;
 
+import com.xiaoliuliu.six.finger.web.demo.servicec.UserService;
+import com.xiaoliuliu.six.finger.web.demo.user.UserController;
 import com.xiaoliuliu.six.finger.web.server.HttpServer;
+import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.ApplicationContext;
+import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.DefaultApplicationContext;
 import com.xiaoliuliu.six.finger.web.webmvc.factory.DispatcherMethodMapper;
 
 import java.time.LocalDate;
@@ -14,11 +18,13 @@ import java.time.LocalDate;
 public class ApplicationServer {
     public static void main(String[] args) throws Exception {
 
-        //先加载springMVC的组件
+        //先加载springMVC的组件,里面同时也初始化的spring的ioc
         DispatcherMethodMapper.loadRoutes();
         // 8081为启动端口,启动Netty
         HttpServer server = new HttpServer(8081);
         server.start();
+
+
 
 
     }

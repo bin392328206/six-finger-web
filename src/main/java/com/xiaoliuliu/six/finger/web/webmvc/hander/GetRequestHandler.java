@@ -2,6 +2,10 @@ package com.xiaoliuliu.six.finger.web.webmvc.hander;
 
 import com.xiaoliuliu.six.finger.web.common.util.ReflectionUtil;
 import com.xiaoliuliu.six.finger.web.common.util.UrlUtil;
+import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.ApplicationContext;
+import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.DefaultApplicationContext;
+import com.xiaoliuliu.six.finger.web.spring.ioc.factory.BeanFactory;
+import com.xiaoliuliu.six.finger.web.spring.ioc.util.IocUtil;
 import com.xiaoliuliu.six.finger.web.webmvc.entity.MethodDetail;
 import com.xiaoliuliu.six.finger.web.webmvc.factory.DispatcherMethodMapper;
 import com.xiaoliuliu.six.finger.web.webmvc.factory.ParameterResolverFactory;
@@ -57,7 +61,12 @@ public class GetRequestHandler implements RequestHandler {
         }
 
         //因为我们现在还没有组合Spring 所以这个地方我们先自己通过反射来生成目标对象
-        Object targetObject = ReflectionUtil.newInstance(methodDetail.getMethod().getDeclaringClass());
+      //  Object targetObject = ReflectionUtil.newInstance(methodDetail.getMethod().getDeclaringClass());
+
+        String beanName = IocUtil.getBeanName(methodDetail.getMethod().getDeclaringClass());
+       //初始化spring的容器 其实在springMVC的时候也是这样的，你要初始化mvc的组件，你就要先初始化spring容器，
+        ApplicationContext applicationContext = new DefaultApplicationContext("application.properties");
+        Object targetObject = applicationContext.getBean(beanName);
         return ReflectionUtil.executeTargetMethod(targetObject, targetMethod, targetMethodParams.toArray());
     }
 }
