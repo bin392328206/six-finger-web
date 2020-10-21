@@ -53,6 +53,14 @@
 > 相关博客
 
 
+## 如何构建和测试
+- 第一步当然是fork或者code代码到本地，然后用你的开发工具打开，下载maven所需要的依赖。
+- 找到如下图所在的目录，然后找到我们的启动类，在demo文件下的server里面
+![](media/images/1.png)
+- 然后下面的1业务代码测试，其实就是和我们平时代码一样了 controller,service等等，然后我们要找我们的请求路径就去下图找
+![](media/images/2.png)
+
+
 ## 公众号二维码
 ![](media/images/公众号.png)
 
