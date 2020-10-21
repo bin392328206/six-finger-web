@@ -4,6 +4,8 @@ import com.xiaoliuliu.six.finger.web.spring.ioc.annotation.Autowired;
 import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanDefinition;
 import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanWrapper;
 import com.xiaoliuliu.six.finger.web.spring.ioc.beans.support.BeanDefinitionReader;
+import com.xiaoliuliu.six.finger.web.spring.ioc.beans.support.XmlBeanDefinitionReader;
+import com.xiaoliuliu.six.finger.web.spring.ioc.io.ClassPathResource;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -17,14 +19,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2020/10/19 10:34
  * ApplicationContext实现类中最重要的就是 refresh() 方法，它的流程就包括了IOC容器初始化、依赖注入和AOP
  */
-public class DefaultApplicationContext implements ApplicationContext {
+public  class DefaultApplicationContext implements ApplicationContext {
 
 
     /**保存factoryBean和BeanDefinition的对应关系*/
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
     /**保存了真正实例化的对象*/
-    private Map<String, BeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+    public static Map<String, BeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
 
     /**
      *   配置文件的路径
@@ -61,6 +63,11 @@ public class DefaultApplicationContext implements ApplicationContext {
         //2、加载配置文件，扫描相关的类，把它们封装成BeanDefinition
         List<BeanDefinition> beanDefinitions = reader.loadBeanDefinitions();
 
+        //加载xml的bean,这边的xml只是简单做了一点点，比如他的很多的标签没有解析，只能说是一个半成品
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader();
+        List<BeanDefinition> beanDefinitions1 = xmlBeanDefinitionReader.loadBeanDefinitions(new ClassPathResource("test.xml"));
+        beanDefinitions.addAll(beanDefinitions1);
+
         //3、注册，把配置信息放到容器里面(伪IOC容器)
         doRegisterBeanDefinition(beanDefinitions);
 
@@ -96,7 +103,7 @@ public class DefaultApplicationContext implements ApplicationContext {
     }
 
     @Override
-    public Object getBean(String beanName) throws Exception {
+    public  Object getBean(String beanName) throws Exception {
         //如果是单例，那么在上一次调用getBean获取该bean时已经初始化过了，拿到不为空的实例直接返回即可
         Object instance = getSingleton(beanName);
         if (instance != null) {

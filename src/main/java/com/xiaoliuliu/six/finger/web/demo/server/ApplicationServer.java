@@ -19,7 +19,10 @@ public class ApplicationServer {
     public static void main(String[] args) throws Exception {
 
         //先加载springMVC的组件,里面同时也初始化的spring的ioc
+        DefaultApplicationContext applicationContext = new DefaultApplicationContext("application.properties");
+
         DispatcherMethodMapper.loadRoutes();
+
         // 8081为启动端口,启动Netty
         HttpServer server = new HttpServer(8081);
         server.start();

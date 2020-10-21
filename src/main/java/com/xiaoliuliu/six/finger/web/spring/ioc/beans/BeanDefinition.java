@@ -25,5 +25,13 @@ public class BeanDefinition {
      */
     private String factoryBeanName;
 
-    public BeanDefinition() {}
+    public BeanDefinition(String beanClassName,String factoryBeanName) {
+        this.beanClassName=beanClassName;
+        this.factoryBeanName=factoryBeanName;
+
+    }
+
+
+    public BeanDefinition() {
+    }
 }

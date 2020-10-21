@@ -4,6 +4,8 @@ import com.xiaoliuliu.six.finger.web.demo.servicec.UserService;
 import com.xiaoliuliu.six.finger.web.demo.servicec.impl.UserServiceImpl;
 import com.xiaoliuliu.six.finger.web.spring.ioc.annotation.Autowired;
 import com.xiaoliuliu.six.finger.web.spring.ioc.annotation.Component;
+import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanWrapper;
+import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.DefaultApplicationContext;
 import com.xiaoliuliu.six.finger.web.webmvc.annotation.GetMapping;
 import com.xiaoliuliu.six.finger.web.webmvc.annotation.PathVariable;
 import com.xiaoliuliu.six.finger.web.webmvc.annotation.RequestMapping;
@@ -25,6 +27,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String get(@PathVariable("id") String id) {
+        BeanWrapper xmlUserService = DefaultApplicationContext.factoryBeanInstanceCache.get("xmlUserService");
+        Object wrappedInstance = xmlUserService.getWrappedInstance();
+        System.out.println(wrappedInstance);
         return userService.getUserName(id);
     }
 
