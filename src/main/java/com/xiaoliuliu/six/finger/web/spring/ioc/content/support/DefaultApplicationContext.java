@@ -156,12 +156,12 @@ public  class DefaultApplicationContext implements ApplicationContext {
             //强制访问该成员变量
             declaredField.setAccessible(true);
 
-            if (this.factoryBeanInstanceCache.get(autowiredBeanName) == null) {
+            if (factoryBeanInstanceCache.get(autowiredBeanName) == null) {
                 continue;
             }
 
             try {
-                declaredField.set(beanWrapper.getWrappedInstance(), this.factoryBeanInstanceCache.get(autowiredBeanName).getWrappedInstance());
+                declaredField.set(beanWrapper.getWrappedInstance(), factoryBeanInstanceCache.get(autowiredBeanName).getWrappedInstance());
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
