@@ -3,6 +3,7 @@ package com.xiaoliuliu.six.finger.web.demo.server;
 import com.xiaoliuliu.six.finger.web.demo.servicec.UserService;
 import com.xiaoliuliu.six.finger.web.demo.user.UserController;
 import com.xiaoliuliu.six.finger.web.server.HttpServer;
+import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanWrapper;
 import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.ApplicationContext;
 import com.xiaoliuliu.six.finger.web.spring.ioc.content.support.DefaultApplicationContext;
 import com.xiaoliuliu.six.finger.web.webmvc.factory.DispatcherMethodMapper;
@@ -20,12 +21,17 @@ public class ApplicationServer {
 
         //先加载springMVC的组件,里面同时也初始化的spring的ioc
         DefaultApplicationContext applicationContext = new DefaultApplicationContext("application.properties");
+        BeanWrapper userServiceImpl = DefaultApplicationContext.factoryBeanInstanceCache.get("userServiceImpl");
+        UserService wrappedInstance = (UserService) userServiceImpl.getWrappedInstance();
+        String userName = wrappedInstance.getUserName("1");
+        System.out.println(userName);
 
         DispatcherMethodMapper.loadRoutes();
 
         // 8081为启动端口,启动Netty
         HttpServer server = new HttpServer(8081);
         server.start();
+
 
 
 

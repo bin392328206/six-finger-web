@@ -1,5 +1,10 @@
 package com.xiaoliuliu.six.finger.web.spring.ioc.content.support;
 
+import com.xiaoliuliu.six.finger.web.spring.aop.AopProxy;
+import com.xiaoliuliu.six.finger.web.spring.aop.CglibAopProxy;
+import com.xiaoliuliu.six.finger.web.spring.aop.JdkDynamicAopProxy;
+import com.xiaoliuliu.six.finger.web.spring.aop.config.AopConfig;
+import com.xiaoliuliu.six.finger.web.spring.aop.support.AdvisedSupport;
 import com.xiaoliuliu.six.finger.web.spring.ioc.annotation.Autowired;
 import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanDefinition;
 import com.xiaoliuliu.six.finger.web.spring.ioc.beans.BeanWrapper;
@@ -114,20 +119,20 @@ public  class DefaultApplicationContext implements ApplicationContext {
         //调用反射初始化Bean
         instance = instantiateBean(beanName, beanDefinition);
 
+
         //2.把这个对象封装到BeanWrapper中
         BeanWrapper beanWrapper = new BeanWrapper(instance);
-
         //3.把BeanWrapper保存到IOC容器中去
         //注册一个类名（首字母小写，如helloService）
-        this.factoryBeanInstanceCache.put(beanName, beanWrapper);
+        factoryBeanInstanceCache.put(beanName, beanWrapper);
 
         //注册一个全类名（如com.lqb.HelloService）
-        this.factoryBeanInstanceCache.put(beanDefinition.getBeanClassName(), beanWrapper);
+       factoryBeanInstanceCache.put(beanDefinition.getBeanClassName(), beanWrapper);
 
         //4.注入 属性
         populateBean(beanName, new BeanDefinition(), beanWrapper);
 
-        return this.factoryBeanInstanceCache.get(beanName).getWrappedInstance();
+        return factoryBeanInstanceCache.get(beanName).getWrappedInstance();
     }
 
     /**
@@ -181,6 +186,17 @@ public  class DefaultApplicationContext implements ApplicationContext {
             Class<?> clazz = Class.forName(className);
             instance = clazz.newInstance();
 
+            //############填充如下代码###############
+            AdvisedSupport config = getAopConfig();
+            //判断当前对象是否需要生成代理对象
+            config.setTargetClass(clazz);
+            config.setTarget(instance);
+
+            //符合PointCut的规则的话，将创建代理对象
+            if(config.pointCutMatch()) {
+                instance = createProxy(config).getProxy();
+            }
+            //#############填充完毕##############
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +204,38 @@ public  class DefaultApplicationContext implements ApplicationContext {
 
         return instance;
     }
+
+    /**
+     *  @author: 小六六
+     *  @Date: 2020/10/12 11:00
+     *  @Description: 此方式是通过配置文件来封装config 还有也可以通过注解
+     */
+    private AdvisedSupport getAopConfig() {
+        AopConfig config = new AopConfig();
+        config.setPointCut(this.reader.getConfig().getProperty("pointCut"));
+        config.setAspectClass(this.reader.getConfig().getProperty("aspectClass"));
+        config.setAspectBefore(this.reader.getConfig().getProperty("aspectBefore"));
+        config.setAspectAfter(this.reader.getConfig().getProperty("aspectAfter"));
+        config.setAspectAfterThrow(this.reader.getConfig().getProperty("aspectAfterThrow"));
+        config.setAspectAfterThrowingName(this.reader.getConfig().getProperty("aspectAfterThrowingName"));
+        return new AdvisedSupport(config);
+    }
+
+    /**
+     *  @author: 小六六
+     *  @Date: 2020/10/12 11:02
+     *  @Description: 有2种生成代理的方式，一个是jdk 一个是cglib
+     */
+    private AopProxy createProxy(AdvisedSupport config) {
+        Class targetClass = config.getTargetClass();
+        //如果接口数量 > 0则使用JDK原生动态代理
+        if(targetClass.getInterfaces().length > 0){
+            return new JdkDynamicAopProxy(config);
+        }
+        CglibAopProxy cglibAopProxy = new CglibAopProxy(config);
+        return cglibAopProxy;
+    }
+
 
 
 

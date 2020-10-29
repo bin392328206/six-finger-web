@@ -1,6 +1,5 @@
 package com.xiaoliuliu.six.finger.web.spring.ioc.util;
 
-import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.Map;

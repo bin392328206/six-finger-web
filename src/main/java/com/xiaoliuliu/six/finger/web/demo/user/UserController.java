@@ -23,14 +23,14 @@ import com.xiaoliuliu.six.finger.web.webmvc.entity.RequestMethod;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserServiceImpl userServiceImpl;
 
     @GetMapping("/{id}")
     public String get(@PathVariable("id") String id) {
         BeanWrapper xmlUserService = DefaultApplicationContext.factoryBeanInstanceCache.get("xmlUserService");
         Object wrappedInstance = xmlUserService.getWrappedInstance();
         System.out.println(wrappedInstance);
-        return userService.getUserName(id);
+        return userServiceImpl.getUserName(id);
     }
 
     @RequestMapping(value = "/mapping/{id}",method = RequestMethod.GET)
