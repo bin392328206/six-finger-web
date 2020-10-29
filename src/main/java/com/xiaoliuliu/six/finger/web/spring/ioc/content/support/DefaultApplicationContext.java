@@ -187,15 +187,15 @@ public  class DefaultApplicationContext implements ApplicationContext {
             instance = clazz.newInstance();
 
             //############填充如下代码###############
-            AdvisedSupport config = getAopConfig();
-            //判断当前对象是否需要生成代理对象
-            config.setTargetClass(clazz);
-            config.setTarget(instance);
-
-            //符合PointCut的规则的话，将创建代理对象
-            if(config.pointCutMatch()) {
-                instance = createProxy(config).getProxy();
-            }
+//            AdvisedSupport config = getAopConfig();
+//            //判断当前对象是否需要生成代理对象
+//            config.setTargetClass(clazz);
+//            config.setTarget(instance);
+//
+//            //符合PointCut的规则的话，将创建代理对象
+//            if(config.pointCutMatch()) {
+//                instance = createProxy(config).getProxy();
+//            }
             //#############填充完毕##############
 
         } catch (Exception e) {
