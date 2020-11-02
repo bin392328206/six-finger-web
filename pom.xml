@@ -6,7 +6,7 @@
 
     <groupId>com.xiaoliuliu</groupId>
     <artifactId>six-finger-web</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
@@ -20,6 +20,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>rpc</module>
+    </modules>
 
 
     <dependencies>
