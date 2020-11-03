@@ -1,0 +1,1 @@
+socketRpcClient=com.xiaoliuliu.rpc.core.remoting.transport.socket.SocketRpcClient

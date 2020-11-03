@@ -1,0 +1,1 @@
+loadBalance=com.xiaoliuliu.rpc.core.loadbalance.impl.ConsistentHashLoadBalance

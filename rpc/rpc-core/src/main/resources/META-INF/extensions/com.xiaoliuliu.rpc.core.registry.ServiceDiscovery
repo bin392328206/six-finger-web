@@ -1,0 +1,1 @@
+zk=com.xiaoliuliu.rpc.core.registry.zk.ZkServiceDiscovery

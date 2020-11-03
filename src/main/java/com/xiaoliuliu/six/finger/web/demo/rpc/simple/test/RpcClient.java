@@ -12,6 +12,5 @@ public class RpcClient {
         IHello hello = (IHello) RpcProxyClient.proxyClient(IHello.class);
         String s = hello.sayHello("小六六写rpc demo呀");
         System.out.println(s);
-
     }
 }
