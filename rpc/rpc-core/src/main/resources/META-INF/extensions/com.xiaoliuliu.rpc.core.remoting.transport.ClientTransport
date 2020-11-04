@@ -1,1 +1,2 @@
 socketRpcClient=com.xiaoliuliu.rpc.core.remoting.transport.socket.SocketRpcClient
+nettyClientTransport=com.xiaoliuliu.rpc.core.remoting.transport.netty.client.NettyClientTransport

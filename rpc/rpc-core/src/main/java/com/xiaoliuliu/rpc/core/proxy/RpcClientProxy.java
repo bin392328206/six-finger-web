@@ -8,6 +8,7 @@ import com.xiaoliuliu.rpc.common.exception.RpcException;
 import com.xiaoliuliu.rpc.core.remoting.transport.ClientTransport;
 import com.xiaoliuliu.rpc.core.remoting.transport.dto.RpcRequest;
 import com.xiaoliuliu.rpc.core.remoting.transport.dto.RpcResponse;
+import com.xiaoliuliu.rpc.core.remoting.transport.netty.client.NettyClientTransport;
 import com.xiaoliuliu.rpc.core.remoting.transport.socket.SocketRpcClient;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -80,10 +81,10 @@ public class RpcClientProxy implements InvocationHandler {
                 .version(rpcServiceProperties.getVersion())
                 .build();
         RpcResponse<Object> rpcResponse = null;
-//        if (clientTransport instanceof NettyClientTransport) {
-//            CompletableFuture<RpcResponse<Object>> completableFuture = (CompletableFuture<RpcResponse<Object>>) clientTransport.sendRpcRequest(rpcRequest);
-//            rpcResponse = completableFuture.get();
-//        }
+        if (clientTransport instanceof NettyClientTransport) {
+            CompletableFuture<RpcResponse<Object>> completableFuture = (CompletableFuture<RpcResponse<Object>>) clientTransport.sendRpcRequest(rpcRequest);
+            rpcResponse = completableFuture.get();
+        }
         if (clientTransport instanceof SocketRpcClient) {
             rpcResponse = (RpcResponse<Object>) clientTransport.sendRpcRequest(rpcRequest);
         }
