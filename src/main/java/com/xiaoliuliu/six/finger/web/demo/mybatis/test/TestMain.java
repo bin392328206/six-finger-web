@@ -26,10 +26,10 @@ public class TestMain {
 
         UserMapper userMapper = session.getMapper(UserMapper.class);
         User user = userMapper.getUser("1");
-        System.out.println("******* " + user);
-        System.out.println("*******all " + userMapper.getAll());
+        System.out.println("-----" + user);
+        System.out.println("-----" + userMapper.getAll());
 
         userMapper.updateUser("1");
-        System.out.println("*******all " + userMapper.getAll());
+        System.out.println("----" + userMapper.getAll());
     }
 }
